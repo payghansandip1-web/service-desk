@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Service Desk Template Generator</title>
+    <style>
+        :root {
+            --primary-color: #0078d4;
+            --primary-hover: #005a9e;
+            --bg-color: #f3f2f1;
+            --card-bg: #ffffff;
+            --text-color: #323130;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary-color);
+        }
+
+        header h1 {
+            margin: 0 0 5px 0;
+            font-size: 28px;
+            color: var(--primary-color);
+        }
+
+        header p {
+            margin: 0;
+            color: #605e5c;
+            font-size: 14px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 850px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 18px;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+        }
+
+        .inline-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .escalation-box {
+            background-color: #fdf6f6;
+            border-left: 4px solid #d83b01;
+            padding: 12px;
+            border-radius: 0 4px 4px 0;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+        .escalation-title {
+            font-weight: bold;
+            color: #d83b01;
+            margin-bottom: 4px;
+        }
+
+        .template-output {
+            width: 100%;
+            height: 420px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            background-color: #faf9f8;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        .badge {
+            background: #e1dfdd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: normal;
+            color: #323130;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IT Service Desk Template Generator</h1>
+        <p>Developed by Sandip Payghan</p>
+    </header>
+
+    <div class="grid">
+        <div>
+            <div class="card">
+                <h2>Teammate & Workstation Information</h2>
+                <div class="inline-group">
+                    <div class="form-group">
+                        <label for="userId">User ID:</label>
+                        <input type="text" id="userId" placeholder="e.g., x123456" oninput="updateTemplate()">
+                    </div>
+                    <div class="form-group">
+                        <label for="userName">User Name:</label>
+                        <input type="text" id="userName" placeholder="e.g., John Doe" oninput="updateTemplate()">
+                    </div>
+                </div>
+
+                <div class="inline-group">
+                    <div class="form-group">
+                        <label for="callbackNum">Call Back Number:</label>
+                        <input type="text" id="callbackNum" placeholder="e.g., 555-0199" oninput="updateTemplate()">
+                    </div>
+                    <div class="form-group">
+                        <label for="shiftTime">Shift Time:</label>
+                        <input type="text" id="shiftTime" placeholder="e.g., 8:00 AM - 5:00 PM EST" oninput="updateTemplate()">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="workLocation">Work Location:</label>
+                    <select id="workLocation" onchange="updateTemplate()">
+                        <option value="">-- Select Location --</option>
+                        <option value="Office">Office</option>
+                        <option value="Branch">Branch</option>
+                        <option value="Remote">Remote</option>
+                        <option value="Contact Center">Contact Center</option>
+                    </select>
+                </div>
+
+                <div class="inline-group">
+                    <div class="form-group">
+                        <label for="deviceType">Device Type:</label>
+                        <select id="deviceType" onchange="updateTemplate()">
+                            <option value="">-- Select Device --</option>
+                            <option value="Prod VDI">Prod VDI</option>
+                            <option value="Dev VDI">Dev VDI</option>
+                            <option value="Branch VDI">Branch VDI</option>
+                            <option value="Laptop">Laptop</option>
+                            <option value="Desktop">Desktop</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="workstationId">Workstation ID (WSID):</label>
+                        <input type="text" id="workstationId" placeholder="e.g., WS12345" oninput="updateTemplate()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Application & Issue Selection</h2>
+                <div class="form-group">
+                    <label for="appSelector">Target Application:</label>
+                    <select id="appSelector" onchange="handleAppChange()">
+                        <option value="">-- Select Application --</option>
+                        <option value="Adobe Acrobat">Adobe Acrobat</option>
+                        <option value="Enterprise Teller">Enterprise Teller</option>
+                        <option value="Microsoft Outlook">Microsoft Outlook</option>
+                        <option value="Microsoft Teams">Microsoft Teams</option>
+                        <option value="Virtual Desktop (VDI)">Virtual Desktop (VDI)</option>
+                        <option value="CUSTOM">-- Custom Issue / Not Listed --</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="issueSelectorGroup" style="display:none;">
+                    <label for="issueSelector">Specific Issue / Error:</label>
+                    <select id="issueSelector" onchange="handleIssueChange()">
+                        </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="targetAppDisplay">Application Name:</label>
+                    <input type="text" id="targetAppDisplay" oninput="updateTemplate()">
+                </div>
+
+                <div class="form-group">
+                    <label for="issueError">Issue / Error Text:</label>
+                    <input type="text" id="issueError" oninput="updateTemplate()">
+                </div>
+
+                <div class="form-group">
+                    <label for="shortDesc">Short Description:</label>
+                    <input type="text" id="shortDesc" oninput="updateTemplate()">
+                </div>
+
+                <div class="form-group">
+                    <label for="tsSteps">Troubleshooting Steps Taken:</label>
+                    <textarea id="tsSteps" rows="6" placeholder="Steps performed..." oninput="updateTemplate()"></textarea>
+                </div>
+
+                <div id="escalationView" class="escalation-box" style="display:none;">
+                    <div class="escalation-title">⚠️ Reference Escalation Path (Will not be added to final ticket):</div>
+                    <div id="escalationPathText"></div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="card" style="position: sticky; top: 20px;">
+                <h2>Generated Ticket Template <span class="badge">Editable View</span></h2>
+                <p style="font-size:12px; margin-top:-10px; color:#605e5c;">You can modify the generated text below freely at any stage before copying.</p>
+                <textarea id="templateArea" class="template-output"></textarea>
+                <button class="btn" style="margin-top: 15px;" onclick="copyTemplate()">Copy Ticket Text</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Repository Database covering all text items completely
+const knowledgeBase = {
+    "Adobe Acrobat": [
+        {
+            error: '"Acrobat Trial: You can try this product for # days"',
+            short: 'Adobe Acrobat (Reader / Pro) - error - "Acrobat Trial: You can try this product for # days"',
+            steps: '1. End all Acrobat processes from Task Manager and relaunch application\n2. Verify AD group (L-SW-U-Adobe-AcrobatProDC / L-MAC-U-Adobe-AcrobatCDPro)\n3. If missing AD group, request Adobe Pro via Approved Software\n4. Clear credentials from Credential Manager (Windows/Web credentials)\n5. Launch Adobe Distiller once and close\n6. Sign out and sign back into Adobe Acrobat\n7. Perform Repair Installation from Help menu\n8. Restart system and test\n9. Reinstall Adobe Acrobat',
+            escalation: 'ITSM-Process-SoftwareAssetMgmt (licensing issue)'
+        },
+        {
+            error: '"License has expired or not been activated"',
+            short: 'Adobe Acrobat (Reader / Pro) - error - "License has expired or not been activated"',
+            steps: '1. End all Acrobat processes and relaunch\n2. Verify AD group for Adobe Pro license\n3. Request/install Adobe Pro if AD group missing\n4. Clear Credential Manager entries\n5. Launch Adobe Distiller and close\n6. Sign out/in Adobe\n7. Repair installation\n8. Restart system\n9. Reinstall Acrobat',
+            escalation: 'ITSM-Process-SoftwareAssetMgmt'
+        },
+        {
+            error: '"A running instance of Acrobat has caused an error"',
+            short: 'Adobe Acrobat (Reader / Pro) - error - "A running instance of Acrobat has caused an error"',
+            steps: '1. End all Acrobat processes from Task Manager\n2. Relaunch and verify\n3. Perform Repair Installation\n4. Restart system\n5. Reinstall Acrobat',
+            escalation: 'Generic Software Escalation'
+        },
+        {
+            error: '"Your request is on its way"',
+            short: 'Adobe Acrobat (Reader / Pro) - error - "Your request is on its way"',
+            steps: '1. End all Acrobat processes\n2. Verify AD group for Adobe Pro\n3. If missing, escalate to TSD Ops for software request\n4. Sign out from adobe.com and sign back in app\n5. Retest issue',
+            escalation: 'ITSM-Process-SoftwareAssetMgmt'
+        },
+        {
+            error: 'Failing to load / crashing',
+            short: 'Adobe Acrobat (Reader / Pro) - launch/install - failing to load/crashing',
+            steps: '1. End all Acrobat processes\n2. Reset default browser (Edge)\n3. Restart system\n4. Launch Adobe Distiller\n5. Reinstall Acrobat',
+            escalation: 'Generic Software Escalation'
+        },
+        {
+            error: 'Failing to install',
+            short: 'Adobe Acrobat (Reader / Pro) - launch/install - Failing to install',
+            steps: '1. Restart workstation\n2. Attempt install from Software Center\n3. Reinstall Acrobat completely',
+            escalation: 'Generic Software Escalation'
+        },
+        {
+            error: 'Adobe icon missing / not installed',
+            short: 'Adobe Acrobat (Reader / Pro) - launch/install - Adobe icon is missing / not installed',
+            steps: '1. Verify required AD group\n2. Request/install software if missing\n3. Manually create shortcut via ProgramData path\n4. Restart workstation\n5. Reinstall Acrobat',
+            escalation: 'ITSM-TSD-IT-REMOTE-SUPPORT'
+        },
+        {
+            error: 'Unable to combine PDFs',
+            short: 'Adobe Acrobat (Reader / Pro) - deviation - Unable to combine PDFs',
+            steps: '1. Verify user has Acrobat Pro (not Reader)\n2. End Acrobat processes\n3. Disable “Save as PDF Portfolio” option\n4. Repair installation\n5. Restart system\n6. Reinstall Acrobat',
+            escalation: 'Generic Software Escalation'
+        },
+        {
+            error: 'Issues opening PDFs from network drive',
+            short: 'Adobe Acrobat (Reader / Pro) - deviation - Issues with opening PDFs from a network drive',
+            steps: '1. End Acrobat processes\n2. Close all MS apps (Outlook, Word, Teams, etc.)\n3. Disable online storage & security settings in preferences\n4. Repair installation\n5. Restart system\n6. Reinstall Acrobat',
+            escalation: 'Generic Software Escalation'
+        },
+        {
+            error: 'Unable to sign a document',
+            short: 'Adobe Acrobat (Reader / Pro) - deviation - Unable to sign a document',
+            steps: '1. Set Adobe as default PDF application\n2. Repair installation\n3. Restart system\n4. Reinstall Acrobat',
+            escalation: 'Generic Software Escalation'
+        },
+        {
+            error: '"Print to PDF" feature missing',
+            short: 'Adobe Acrobat (Reader / Pro) - deviation - "Print to PDF" feature is missing',
+            steps: '1. Repair installation\n2. Restart system\n3. Reinstall Acrobat',
+            escalation: 'Generic Software Escalation'
+        },
+        {
+            error: 'Redaction tool inaccurate',
+            short: 'Adobe Acrobat (Reader / Pro) - deviation - Redaction tool is inaccurate',
+            steps: '1. Verify user has Acrobat Pro\n2. Toggle New UI (disable/enable)\n3. Repair installation\n4. Restart system\n5. Reinstall Acrobat',
+            escalation: 'Generic Software Escalation'
+        },
+        {
+            error: 'Repeat Login Prompts',
+            short: 'Adobe Acrobat - Repeat Login Prompts',
+            steps: '1. Enable New Acrobat UI\n2. Clear Credential Manager entries\n3. Reset default browser\n4. Restart workstation\n5. Full uninstall and reinstall Acrobat',
+            escalation: 'Tier 1: ITSM-TSD-IT-REMOTE-SUPPORT | Tier 2: ITSM-TSD-IT-TEAMMATE-ENABLEMENT'
+        },
+        {
+            error: 'Undocumented issue',
+            short: 'Adobe Acrobat (Reader / Pro) - UNDC - (custom issue)',
+            steps: '1. Verify AD group permissions\n2. Request software if missing\n3. Clear Credential Manager\n4. Launch Adobe Distiller\n5. Sign out/in Adobe\n6. Repair installation\n7. Restart system\n8. Reinstall Acrobat',
+            escalation: 'ITSM-Process-SoftwareAssetMgmt'
+        }
+    ],
+    "Enterprise Teller": [
+        {
+            error: '"Scanner Connection Error" / "Scanner Reboot Required"',
+            short: 'Enterprise Teller - Check Scanners & Receipt Printers - "Scanner Connection" error',
+            steps: '1. Verify workstation type (VDI / Windows Desktop) and capture WSID\n2. Collect scanner & printer serial numbers and update CI in ticket\n3. Check network connectivity/configurations (section n644)\n4. Access scanner admin GUI via SSE URL (browser test)\n5. If loads -> capture screenshot and escalate accordingly\n6. If not -> proceed to network troubleshooting\n7. Restart INET modem (30 seconds unplug/plug)\n8. Re-login to ET and test scanning\n9. Remap scanner/printer if needed',
+            escalation: 'Admin GUI loads -> ITSM-RTAS-CB-EnterpriseTeller | GUI fails -> ITSM-TSD-IT-TEAMMATE-ENABLEMENT | Unresolved -> ITSM-RTAS-CB-EnterpriseTeller'
+        },
+        {
+            error: '"please place item to be scanned in the scanner"',
+            short: 'Enterprise Teller - Check Scanners & Receipt Printers - "please place item to be scanned" error',
+            steps: '1. Fully sign out and close ET correctly\n2. Power cycle scanner\n3. Run cleaning mode using cleaner card\n4. Re-login and test scan\n5. Restart workstation / reset VDI (based on device type)\n6. Power cycle printer + scanner and reset printer config\n7. Check ET config profile\n8. Retrieve scanner logs',
+            escalation: 'Tier 1 -> ITSM-TSD-IT-REMOTE-SUPPORT | Tier 2 -> ITSM-TSD-IT-TEAMMATE-ENABLEMENT | Tier 3 -> ITSM-RTAS-CB-EnterpriseTeller'
+        },
+        {
+            error: '"Scanner Not Enabled"',
+            short: 'Enterprise Teller - Check Scanners & Receipt Printers - "Scanner Not Enabled"',
+            steps: '1. Verify network connectivity/configuration\n2. Follow network troubleshooting (n644)\n3. Validate workstation type\n4. Ensure ET session properly closed',
+            escalation: 'Standard 3-tier escalation path'
+        },
+        {
+            error: '"Last Item Jammed and Did Not Scan Properly"',
+            short: 'Enterprise Teller - Check Scanners & Receipt Printers - "Last Item Jammed"',
+            steps: '1. Sign out and close ET\n2. Remove jammed document\n3. Run cleaning card & compressed air cleaning\n4. Rotate scanner separator (blue triangle)\n5. Ensure proper document alignment\n6. Restart workstation / VDI\n7. Power cycle devices and reset printer\n8. Retrieve scanner logs',
+            escalation: 'Tier 1 -> Remote Support | Tier 2 -> Teammate Enablement | Tier 3 -> Enterprise Teller team'
+        },
+        {
+            error: '"Receipt printer error"',
+            short: 'Enterprise Teller - Check Scanners & Receipt Printers - "receipt printer error"',
+            steps: '1. Verify paper availability and no jams\n2. Follow device-type specific steps\n3. Sign out and close ET properly\n4. Remap printer (VDI)\n5. Check network configuration',
+            escalation: 'Network/config unresolved -> escalate via standard 3-tier path'
+        },
+        {
+            error: '"Cashbox in use"',
+            short: 'Enterprise Teller - cashbox - "Cashbox in use"',
+            steps: '1. Educate user on proper ET logoff\n2. Sign out properly and relaunch\n3. Login without cashbox -> Reset cashbox via Admin (manager) -> logout -> relogin with cashbox\n4. Reset Edge browser\n5. Option: if not fix manager need to do office close/reopen process',
+            escalation: 'Tier 1 -> Remote Support -> Tier 2 -> Team Enablement -> Tier 3 -> ET Team'
+        },
+        {
+            error: '"Network Communication Error"',
+            short: 'Enterprise Teller - login/launch - "Network Communication Error"',
+            steps: '1. Collect scanner & printer serial numbers\n2. Add CI to ticket\n3. Follow network troubleshooting (n644)\n4. Validate connectivity/config',
+            escalation: 'Standard escalation path (Tier 1 -> Tier 3)'
+        },
+        {
+            error: '"SignOn Error: An error occurred during signon"',
+            short: 'Enterprise Teller - login/launch - "SignOn Error"',
+            steps: '1. Sign out and close ET properly\n2. Verify AD group access (Get-ETAccess)\n3. Reset Edge browser\n4. Restart workstation / reset VDI',
+            escalation: 'Tier 1 -> Tier 2 -> Tier 3'
+        },
+        {
+            error: '"Workstation Error: Workstation is not initialized"',
+            short: 'Enterprise Teller - login/launch - "Workstation not initialized"',
+            steps: '1. Sign out and close ET\n2. Create ET branch profile\n3. Restart workstation / VDI\n4. Reset Edge browser',
+            escalation: 'Standard escalation path'
+        },
+        {
+            error: '"FINDSTR: Cannot open"',
+            short: 'Enterprise Teller - login/launch - "FINDSTR: Cannot open"',
+            steps: '1. No troubleshooting required\n2. Collect branch details (property code, city, state)',
+            escalation: 'Direct assign to ITSM-RTAS-CB-EnterpriseTeller'
+        },
+        {
+            error: '"Incomplete Customer Session Detected"',
+            short: 'Enterprise Teller - balance / transaction - "Incomplete Customer Session Detected"',
+            steps: '1. Click warning -> OK\n2. Open transaction list\n3. Close incomplete transactions (auto reverse)\n4. Reprocess transaction',
+            escalation: 'Tier 1 -> Tier 2 -> Tier 3 if unresolved'
+        },
+        {
+            error: '"ID Scan Failed"',
+            short: 'Enterprise Teller - ID scanning - "ID Scan Failed"',
+            steps: '1. Verify ID validity (not expired, correct type)\n2. Ensure proper placement/alignment\n3. Retry scan\n4. Clean scanner\n5. Try alternate orientation\n6. Retrieve logs',
+            escalation: 'Single ID -> manual entry & close | Multiple IDs issue -> ITSM-TSD-IT-TEAMMATE-ENABLEMENT'
+        },
+        {
+            error: '"Enterprise Teller Install in Progress"',
+            short: 'Enterprise Teller - login/launch - "Install in Progress"',
+            steps: '1. Refresh Software Center policies\n2. Check install status\n3. Restart device\n4. Allow up to 1 hour for install',
+            escalation: 'If failed twice/unresolved -> Tier 1 -> Tier 3 escalation'
+        }
+    ],
+    "Microsoft Outlook": [
+        {
+            error: '"Missing emails/folders"',
+            short: 'Microsoft Outlook - emails - Missing emails/folders',
+            steps: '1. Check folder collapse/expand arrows\n2. Clear filters (View -> View Settings -> Filter -> Clear All)\n3. Check Online Archive for moved emails\n4. Verify retention policy via BEAT tool\n5. Check emails in Outlook Webmail\n6. Restore from Deleted Items\n7. Non-persistent VDI: reset VDI -> rebuild profile\n8. Windows/Persistent VDI: reset view -> rebuild Outlook profile\n9. Run Outlook.exe /resetnavpane\n10. Run Outlook.exe /safe\n11. Repair/reinstall Office',
+            escalation: 'Webmail issue -> ITSM-Collaboration-ExchangeAndEmailSecurity | Local/Device specific -> Software Escalation'
+        },
+        {
+            error: '"restore deleted items"',
+            short: 'Microsoft Outlook - emails - restore deleted items',
+            steps: '1. Check Deleted Items folder\n2. Use Recover Deleted Items option\n3. Restore emails manually\n4. Use Webmail for bulk restore (>50 items)\n5. Verify retention policy restrictions',
+            escalation: 'No escalation if permanently deleted beyond retention'
+        },
+        {
+            error: '"An internal support function returned an error"',
+            short: 'Microsoft Outlook - emails - "An internal support function returned an error"',
+            steps: '1. Test sending email via Webmail\n2. Check for invalid/duplicate email addresses\n3. Send emails individually\n4. Non-persistent VDI: reset + rebuild profile\n5. Windows: reset view -> rebuild profile -> resetnavpane -> safe mode -> restart -> repair Office',
+            escalation: 'Webmail issue -> ITSM-Collaboration-ExchangeAndEmailSecurity | Otherwise -> Software Escalation'
+        },
+        {
+            error: '"You don\'t have permission to send to:"',
+            short: 'Microsoft Outlook - emails - "You don\'t have permission to send to:"',
+            steps: '1. Verify group mailbox attestation status\n2. Confirm mailbox not locked\n3. Contact mailbox owner\n4. Review ownership and permissions',
+            escalation: 'No escalation; user must contact mailbox owner/team'
+        },
+        {
+            error: 'Unable to Send Emails (No Error)',
+            short: 'Microsoft Outlook - emails - Unable to send emails, no errors',
+            steps: '1. Check DLP or email gateway responses\n2. Test sending from Webmail\n3. Non-persistent VDI: reset + rebuild profile\n4. Windows: reset view -> rebuild profile -> resetnavpane -> safe mode -> repair Office',
+            escalation: 'If blocked -> follow DLP/Gateway escalation | If persists -> Software Escalation or Exchange team'
+        },
+        {
+            error: 'Failing to Receive Emails',
+            short: 'Microsoft Outlook - emails - Failing to receive emails',
+            steps: '1. Check Metered Connection warning\n2. Verify if sender gets block notification\n3. Check Webmail / Check quarantine (Proofpoint)\n4. Disable Outlook rules\n5. Non-persistent VDI: reset + rebuild profile\n6. Windows: reset view -> rebuild profile -> resetnavpane -> safe mode -> repair Office',
+            escalation: 'Webmail issue -> ITSM-Collaboration-ExchangeAndEmailSecurity'
+        },
+        {
+            error: '"Cannot start Outlook"',
+            short: 'Microsoft Outlook - Launch/Login - "Cannot start Outlook"',
+            steps: '1. Update Outlook / Disable Metered Connection\n2. Clear credentials (Credential Manager)\n3. Reset view settings / Rebuild Outlook profile\n4. Run Outlook.exe /resetnavpane or /safe\n5. Restart system and repair Office',
+            escalation: 'Software Escalation'
+        },
+        {
+            error: '"Unlicensed Product"',
+            short: 'Microsoft Outlook - Launch/Login - "Unlicensed Product"',
+            steps: '1. Check AD group (AAG-M365-LIC-OAPPS / E5)\n2. Update Office / Disable Metered Connection\n3. Clear credentials & Rebuild profile\n4. Repair Office',
+            escalation: 'If license missing -> ITSM-Collaboration-M365 | Persists -> Software escalation'
+        }
+    ],
+    "Microsoft Teams": [
+        {
+            error: '"Your account is blocked"',
+            short: 'Microsoft Teams - Error: "Your account is blocked"',
+            steps: '1. Reset Teams app (Windows/persistent VDI -> KB reset steps / non-persistent VDI -> full VDI reset)\n2. Restart workstation and re-login\n3. Verify issue after login',
+            escalation: 'ITSM-InfoSec-Azure-IAM-Operations'
+        },
+        {
+            error: '"We Can\'t Connect You"',
+            short: 'Microsoft Teams - launch / login issues - "We Can\'t Connect You" error',
+            steps: '1. Reset Teams app (device-based: Windows/VDI)\n2. Repeat reset for persistent devices\n3. Restart workstation\n4. Test on Teams web version',
+            escalation: 'Web issue -> ITSM-Collaboration-Teams | Local issue -> Software Escalation (dp5d)'
+        },
+        {
+            error: '"Something went wrong (135011 / 700003)"',
+            short: 'Microsoft Teams - launch / login issues - Something went wrong error',
+            steps: '1. Clear extra credentials in Credential Manager\n2. Run dsregcmd /leave and restart\n3. Reset Teams app & Restart system\n4. Check Teams web version',
+            escalation: 'Web issue -> ITSM-Collaboration-Teams | Local issue -> Software Escalation'
+        },
+        {
+            error: 'Microphone not working / No Sound',
+            short: 'Microsoft Teams - audio issue',
+            steps: '1. Verify mic/speakers in Windows Sound settings\n2. Validate Teams device configurations & sound mixer levels\n3. Check microphone privacy permissions\n4. Perform Teams test call\n5. Reinstall drivers (Windows 11) / Reset Teams app',
+            escalation: 'Calls -> ITSM-Ops-EnterpriseVoice | Meetings -> ITSM-AudioVisualSupport'
+        }
+    ],
+    "Virtual Desktop (VDI)": [
+        {
+            error: 'Copy/Paste Not Working',
+            short: 'Virtual Desktop (VDI) - misc - copy / paste is not working',
+            steps: '1. Identify VDI type (PD/ND/PDU/NDU) and environment\n2. Login to Citrix Director (prod/dev based on VDI)\n3. Check Policies tab -> verify EXTERNAL ACCESS policies\n4. If external access -> expected behavior (vendor restriction)\n5. If internal -> reset/reinstall Citrix Workspace and retest',
+            escalation: 'Tier1 -> ITSM-TSD-IT-REMOTE-SUPPORT | Tier2 -> ITSM-TSD-IT-TEAMMATE-ENABLEMENT'
+        },
+        {
+            error: 'Low Disk Space',
+            short: 'Virtual Desktop (VDI) - misc - Low Disk Space',
+            steps: '1. Open Storage Settings -> enable Storage Sense\n2. Remove unused apps / Delete Temporary files\n3. Clear %temp% folder\n4. Run OneDrive “Free up space”\n5. Delete CrashDumps folder & Rebuild Indexing\n6. Move large files (>5GB) to OneDrive root',
+            escalation: 'Tier1 -> Warm transfer | Tier2 -> ITSM-TSD-IT-TEAMMATE-ENABLEMENT | Tier3 -> ITSM-VDI SUPPORT'
+        },
+        {
+            error: '"Login Failed, Try Again or Contact Help Desk"',
+            short: 'Virtual Desktop (VDI) - login - "Login Failed"',
+            steps: '1. Check RSA authentication logs & validate token entries\n2. Check account status (locked/expired/sabbatical) in PowerShell\n3. Reset/unlock password if required\n4. Validate correct login method (updated URLs)',
+            escalation: 'Tier1 -> Warm transfer | Tier2 -> ITSM-TSD-IT-TEAMMATE-ENABLEMENT'
+        },
+        {
+            error: 'VDI Slowness / Freezing',
+            short: 'Virtual Desktop (VDI) - performance - freezing/slowness',
+            steps: '1. Identify VDI & environment\n2. Check latency and ping\n3. Clear AppData temp folder\n4. Restart VDI from Director\n5. If latency > 250ms, TM must contact local IT help desk to check network',
+            escalation: 'Tier2 -> ITSM-TSD-IT-TEAMMATE-ENABLEMENT'
+        }
+    ]
+};
+
+function handleAppChange() {
+    const appSelect = document.getElementById("appSelector");
+    const issueGroup = document.getElementById("issueSelectorGroup");
+    const issueSelect = document.getElementById("issueSelector");
+    
+    const targetAppDisplay = document.getElementById("targetAppDisplay");
+    const issueError = document.getElementById("issueError");
+    const shortDesc = document.getElementById("shortDesc");
+    const tsSteps = document.getElementById("tsSteps");
+    const escView = document.getElementById("escalationView");
+
+    const selectedApp = appSelect.value;
+
+    if (!selectedApp || selectedApp === "CUSTOM") {
+        issueGroup.style.display = "none";
+        targetAppDisplay.value = selectedApp === "CUSTOM" ? "" : "";
+        issueError.value = "";
+        shortDesc.value = "";
+        tsSteps.value = "";
+        escView.style.display = "none";
+        updateTemplate();
+        return;
+    }
+
+    // Populate issues
+    issueSelect.innerHTML = '<option value="">-- Select specific issue --</option>';
+    knowledgeBase[selectedApp].forEach((item, index) => {
+        let opt = document.createElement("option");
+        opt.value = index;
+        opt.textContent = item.error;
+        issueSelect.appendChild(opt);
+    });
+
+    issueGroup.style.display = "block";
+    targetAppDisplay.value = selectedApp;
+    
+    // Clear sub fields until chosen
+    issueError.value = "";
+    shortDesc.value = "";
+    tsSteps.value = "";
+    escView.style.display = "none";
+    updateTemplate();
+}
+
+function handleIssueChange() {
+    const appSelect = document.getElementById("appSelector").value;
+    const issueIndex = document.getElementById("issueSelector").value;
+    
+    const issueError = document.getElementById("issueError");
+    const shortDesc = document.getElementById("shortDesc");
+    const tsSteps = document.getElementById("tsSteps");
+    const escView = document.getElementById("escalationView");
+    const escText = document.getElementById("escalationPathText");
+
+    if (issueIndex === "") {
+        issueError.value = "";
+        shortDesc.value = "";
+        tsSteps.value = "";
+        escView.style.display = "none";
+        updateTemplate();
+        return;
+    }
+
+    const item = knowledgeBase[appSelect][issueIndex];
+    issueError.value = item.error;
+    shortDesc.value = item.short;
+    tsSteps.value = item.steps;
+    
+    if(item.escalation) {
+        escView.style.display = "block";
+        escText.textContent = item.escalation;
+    } else {
+        escView.style.display = "none";
+    }
+
+    updateTemplate();
+}
+
+function updateTemplate() {
+    const userId = document.getElementById("userId").value || "N/A";
+    const userName = document.getElementById("userName").value || "N/A";
+    const callbackNum = document.getElementById("callbackNum").value || "N/A";
+    const workLocation = document.getElementById("workLocation").value || "N/A";
+    const shiftTime = document.getElementById("shiftTime").value || "N/A";
+    const deviceType = document.getElementById("deviceType").value || "N/A";
+    const workstationId = document.getElementById("workstationId").value || "N/A";
+    
+    const targetApp = document.getElementById("targetAppDisplay").value || "N/A";
+    const issueError = document.getElementById("issueError").value || "N/A";
+    const shortDesc = document.getElementById("shortDesc").value || "N/A";
+    const tsSteps = document.getElementById("tsSteps").value || "N/A";
+
+    const textTemplate = 
+`==================================================
+              IT SERVICE DESK TICKET
+==================================================
+TEAMMATE INFORMATION
+--------------------------------------------------
+User ID            : ${userId}
+User Name          : ${userName}
+Call Back Number   : ${callbackNum}
+Work Location      : ${workLocation}
+Shift Time         : ${shiftTime}
+
+DEVICE & WORKSTATION INFORMATION
+--------------------------------------------------
+Device Type        : ${deviceType}
+Workstation ID     : ${workstationId}
+
+APPLICATION & INCIDENT DETAILS
+--------------------------------------------------
+Target Application : ${targetApp}
+Issue / Error      : ${issueError}
+Short Description  : ${shortDesc}
+
+TROUBLESHOOTING STEPS PERFORMED
+--------------------------------------------------
+${tsSteps}
+==================================================`;
+
+    document.getElementById("templateArea").value = textTemplate;
+}
+
+function copyTemplate() {
+    const copyText = document.getElementById("templateArea");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+    navigator.clipboard.writeText(copyText.value);
+    alert("Template text copied to clipboard successfully!");
+}
+
+// Initial template call on load
+updateTemplate();
+</script>
+
+</body>
+</html>
